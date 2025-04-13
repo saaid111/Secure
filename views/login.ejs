@@ -1,0 +1,26 @@
+<!-- views/login.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <% if (error) { %>
+      <!-- VULNERABILITY: Unescaped output, allowing XSS -->
+      <p class="error"><%- error %></p>
+    <% } %>
+    <form action="/login" method="POST">
+      <label>Username:</label>
+      <input type="text" name="username" required>
+      <label>Password:</label>
+      <input type="password" name="password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/register">Register here</a>.</p>
+  </div>
+</body>
+</html>

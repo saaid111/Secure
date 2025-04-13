@@ -1,0 +1,45 @@
+<!-- views/blog.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <!-- VULNERABILITY: Unescaped output of username -->
+      <h1>Welcome, <%- username %></h1>
+      <a href="/logout">Logout</a>
+    </header>
+    <section>
+      <h2>Create Post</h2>
+      <form action="/blog/create" method="POST">
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="content" placeholder="Content" required></textarea>
+        <button type="submit">Create Post</button>
+      </form>
+    </section>
+    <section>
+      <h2>All Posts</h2>
+      <% posts.forEach(function(post) { %>
+        <div class="post">
+          <!-- VULNERABILITY: Unescaped output allows for stored/reflected XSS -->
+          <h3><%- post.title %></h3>
+          <p><%- post.content %></p>
+          <p>By: <%- post.username %> at <%- post.created_at %></p>
+          <form action="/blog/edit/<%- post.id %>" method="POST">
+            <input type="text" name="title" value="<%- post.title %>" required>
+            <input type="text" name="content" value="<%- post.content %>" required>
+            <button type="submit">Edit</button>
+          </form>
+          <form action="/blog/delete/<%- post.id %>" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      <% }); %>
+    </section>
+  </div>
+</body>
+</html>
